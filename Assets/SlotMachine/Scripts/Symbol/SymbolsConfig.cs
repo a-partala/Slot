@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 using static Symbol;
 
@@ -6,19 +6,10 @@ using static Symbol;
 public class SymbolsConfig : ScriptableObject
 {
     [SerializeField] private Symbol symbolPrefab;
-    [SerializeField] private Data[] symbolDatas;
-    // Using a basic dictionary for stability. SerializedDictionary could improve performance but may introduce bugs.
-    private Dictionary<Type, Data> dataMap = new();
-    private bool isMapAssigned = false;
+    [SerializeField] private SerializedDictionary<Type, Data> dataMap = new();
 
     public Data GetData(Type type)
     {
-        //Rebuild the map if new data is added to symbolDatas
-        if (!isMapAssigned || dataMap.Count < symbolDatas.Length)
-        {
-            AssignMap();
-        }
-
         if(!dataMap.ContainsKey(type))
         {
             return new();
@@ -30,22 +21,5 @@ public class SymbolsConfig : ScriptableObject
     public Symbol GetSymbolPrefab()
     {
         return symbolPrefab;
-    }
-
-    private void AssignMap()
-    {
-        dataMap.Clear();
-        for (int i = 0; i < symbolDatas.Length; i++)
-        {
-            Data data = symbolDatas[i];
-            if (dataMap.ContainsKey(data.Type))
-            {
-                continue;
-            }
-
-            dataMap.Add(data.Type, data);
-        }
-
-        isMapAssigned = true;
     }
 }

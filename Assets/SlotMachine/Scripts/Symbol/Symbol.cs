@@ -22,7 +22,6 @@ public class Symbol : MonoBehaviour
     [Serializable]
     public class Data
     {
-        public Type Type = Type.I;
         public Sprite Sprite = null;
         public float Multiplier = 1;
     }
